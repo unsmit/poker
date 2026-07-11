@@ -3,6 +3,7 @@ import java.util.Collections;
 
 public class Deck{
     private ArrayList<Card> deck = new ArrayList<Card>();
+    private ArrayList<Card> burnPile = new ArrayList<Card>();
 
     public Deck(){
         reset();
@@ -29,6 +30,12 @@ public class Deck{
     }
 
     public void removeCard(Card c){
-        deck.remove();
+        if (!deck.remove(c)) {
+            throw new IllegalArgumentException("Card not found in deck: " + c);
+        }
+    }
+
+    public void burn(){
+        burnPile.add(drawCard());
     }
 }
