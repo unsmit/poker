@@ -1,4 +1,4 @@
-public Card{
+public class Card{
     private Rank rank;
     private Suit suit;
 
@@ -15,16 +15,16 @@ public Card{
         return this.suit;
     }
 
-    public bool equals(Card c){
-        if(c.getRank() == this.getRank()){
+    public boolean equals(Card c){
+        if(c.getRank() == this.getRank() && c.getSuit() == this.getSuit()){
             return true;
         }
         return false;
     }
 
     public String toString(){
-        return "" + this.getRank() + " of " + this.getSuit "S";
+        return "" + this.getRank() + " of " + this.getSuit() "S";
     }
 
-    
+
 }
