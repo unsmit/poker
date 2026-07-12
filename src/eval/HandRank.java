@@ -1,4 +1,6 @@
-public enum Handrank{
+package eval;
+
+public enum HandRank{
     HIGH_CARD(0),
     ONE_PAIR(1),
     TWO_PAIR(2),
@@ -11,7 +13,7 @@ public enum Handrank{
 
     private final int value;
 
-    Handrank(int value){
+    HandRank(int value){
         this.value = value;
     }
 
