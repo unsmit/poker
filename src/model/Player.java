@@ -1,3 +1,4 @@
+package model;
 import java.util.ArrayList;
 
 public class Player{
@@ -6,7 +7,7 @@ public class Player{
     public Player(){ }
 
     public void addCard(Card card){
-        if(playerCards.size >= 2){
+        if(playerCards.size() >= 2){
             throw new IllegalStateException("Player already has two cards");
         }
 

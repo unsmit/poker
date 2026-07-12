@@ -1,3 +1,5 @@
+package model;
+
 public class Card{
     private Rank rank;
     private Suit suit;
@@ -23,8 +25,6 @@ public class Card{
     }
 
     public String toString(){
-        return "" + this.getRank() + " of " + this.getSuit() "S";
+        return "" + this.getRank() + " of " + this.getSuit() + "S";
     }
-
-
 }

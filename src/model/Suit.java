@@ -1,5 +1,6 @@
+package model;
 
-public enum Suit(){
+public enum Suit{
     HEART,
     SPADE,
     CLUB,

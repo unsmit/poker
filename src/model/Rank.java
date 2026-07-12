@@ -1,3 +1,4 @@
+package model;
 
 public enum Rank{
     TWO(2),
@@ -21,6 +22,6 @@ public enum Rank{
     }
 
     public int getVal(){
-        return this.val;
+        return this.value;
     }
 }
