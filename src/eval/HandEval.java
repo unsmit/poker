@@ -1,7 +1,6 @@
 package eval;
-import model.*;
-
 import java.util.ArrayList;
+import model.*;
 
 public class HandEval {
     // TODO: Create a large list containing all cards and evaluate all possible hands
@@ -12,5 +11,23 @@ public class HandEval {
         fullHand.addAll(player.getPlayerCards());
     }
     
+    public boolean isFlush(){
+        return false;
+    }
 
+    public boolean isStraight(){
+        return false;
+    }
+
+    public boolean straightFlush(){
+        return false;
+    }
+
+    public boolean royaleFlush(){
+        return false;
+    }
+
+    public boolean fullHouse(){
+        return false;
+    }
 }
