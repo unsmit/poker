@@ -1,14 +1,14 @@
 package eval;
-import model.Rank;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HandValue{
     private final HandRank handRank;
-    private final List<Rank> tieBreakers;
+    private final ArrayList<Card> tieBreakers;
 
-    public HandValue(HandRank handRank, List<Rank> tieBreakers){
+    public HandValue(HandRank handRank, ArrayList<Card> tieBreakers){
         this.handRank = handRank;
         this.tieBreakers = new ArrayList<>(tieBreakers);
     }
@@ -17,7 +17,7 @@ public class HandValue{
         return this.handRank;
     }
 
-    public List<Rank> getTieBreakers(){
-        return new ArrayList<Rank>(tieBreakers);
+    public List<Card> getTieBreakers(){
+        return new ArrayList<Card>(tieBreakers);
     }
 }

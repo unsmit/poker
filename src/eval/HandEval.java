@@ -24,6 +24,38 @@ public class HandEval {
         }
     }
 
+    private ArrayList<Card> sortHand(ArrayList<Card> hand){
+        if(hand != null){
+            hand.sort((c1, c2) ->
+                    Integer.compare(c2.getRank().getVal(), c1.getRank().getVal()));
+        }
+        return hand;
+    }
+
+    private void addHighestKickers(ArrayList<Card> hand, int numberOfKickers,
+            Rank... excludedRanks){
+        ArrayList<Card> sortedHand = sortHand(new ArrayList<>(fullHand));
+        ArrayList<Rank> usedKickerRanks = new ArrayList<>();
+
+        for(Card card : sortedHand){
+            boolean excluded = false;
+            for(Rank rank : excludedRanks){
+                if(card.getRank() == rank){
+                    excluded = true;
+                    break;
+                }
+            }
+
+            if(!excluded && !usedKickerRanks.contains(card.getRank())){
+                hand.add(card);
+                usedKickerRanks.add(card.getRank());
+                if(usedKickerRanks.size() == numberOfKickers){
+                    return;
+                }
+            }
+        }
+    }
+
     public ArrayList<Card> checkCondition(int n){
         Rank highestRank = null;
 
@@ -41,7 +73,7 @@ public class HandEval {
                     cards.add(card);
                 }
             }
-            return cards;
+            return sortHand(cards);
         }
         return null;
     }
@@ -90,8 +122,7 @@ public class HandEval {
         }
 
         if(flushCards != null){
-            flushCards.sort((c1, c2) ->
-                    Integer.compare(c2.getRank().getVal(), c1.getRank().getVal()));
+            sortHand(flushCards);
             return new ArrayList<>(flushCards.subList(0, 5));
         }
 
@@ -102,6 +133,8 @@ public class HandEval {
     public ArrayList<Card> fourOfAKind(){
         ArrayList<Card> check = checkCondition(4);
         if(check != null){
+            Rank fourRank = check.get(0).getRank();
+            addHighestKickers(check, 1, fourRank);
             return check;
         }
         return null;
@@ -110,6 +143,8 @@ public class HandEval {
     public ArrayList<Card> threeOfAKind(){
         ArrayList<Card> check = checkCondition(3);
         if(check != null){
+            Rank threeRank = check.get(0).getRank();
+            addHighestKickers(check, 2, threeRank);
             return check;
         }
         return null;
@@ -118,6 +153,8 @@ public class HandEval {
     public ArrayList<Card> onePair(){
         ArrayList<Card> check = checkCondition(2);
         if(check != null){
+            Rank pairRank = check.get(0).getRank();
+            addHighestKickers(check, 3, pairRank);
             return check;
         }
         return null;
@@ -137,16 +174,21 @@ public class HandEval {
         ArrayList<Card> cards = new ArrayList<>();
         if(pairRanks.size() >= 2){
             int firstPairCount = 0;
-            int secondPairCount = 0;
             for(Card card : fullHand){
                 if(card.getRank() == pairRanks.get(0) && firstPairCount < 2){
                     cards.add(card);
                     firstPairCount++;
-                } else if(card.getRank() == pairRanks.get(1) && secondPairCount < 2){
+                }
+            }
+
+            int secondPairCount = 0;
+            for(Card card : fullHand){
+                if(card.getRank() == pairRanks.get(1) && secondPairCount < 2){
                     cards.add(card);
                     secondPairCount++;
                 }
             }
+            addHighestKickers(cards, 1, pairRanks.get(0), pairRanks.get(1));
             return cards;
         }
         return null;
@@ -177,12 +219,16 @@ public class HandEval {
             Rank pairRank = pairRanks.get(0);
 
             int threeCount = 0;
-            int pairCount = 0;
             for(Card card: fullHand){
                 if(card.getRank() == threeRank && threeCount < 3){
                     fullSet.add(card);
                     threeCount++;
-                } else if(card.getRank() == pairRank && pairCount < 2){
+                }
+            }
+
+            int pairCount = 0;
+            for(Card card: fullHand){
+                if(card.getRank() == pairRank && pairCount < 2){
                     fullSet.add(card);
                     pairCount++;
                 }
@@ -248,7 +294,7 @@ public class HandEval {
         }
 
         if(bestStraight != null){
-            return bestStraight;
+            return sortHand(bestStraight);
         }
 
         boolean frontStraight = false;
@@ -263,11 +309,11 @@ public class HandEval {
         strSet.clear();
 
         if(frontStraight){
-            strSet.add(rankToCard.get(Rank.ACE));
-            strSet.add(rankToCard.get(Rank.TWO));
-            strSet.add(rankToCard.get(Rank.THREE));
-            strSet.add(rankToCard.get(Rank.FOUR));
             strSet.add(rankToCard.get(Rank.FIVE));
+            strSet.add(rankToCard.get(Rank.FOUR));
+            strSet.add(rankToCard.get(Rank.THREE));
+            strSet.add(rankToCard.get(Rank.TWO));
+            strSet.add(rankToCard.get(Rank.ACE));
 
             return strSet;
         }
@@ -329,7 +375,7 @@ public class HandEval {
     }
 
     public HandValue handEval(ArrayList<Card> hand){
-        ArrayList<Rank> tieBreakers = new ArrayList<>();
+        ArrayList<Card> tieBreakers = new ArrayList<>();
         ArrayList<Card> usedCards;
         HandValue value = new HandValue(null, null);
 
@@ -337,8 +383,11 @@ public class HandEval {
             tieBreakers = null;
             return new HandValue(HandRank.ROYAL_FLUSH, tieBreakers);
         } else if((usedCards = isStraightFlush()) != null){
-            
-
+            tieBreakers = usedCards;
+            return new HandValue(HandRank.STRAIGHT_FLUSH, tieBreakers);
+        } else if((usedCards = fourOfAKind()) != null){
+            tieBreakers = usedCards;
+            return new HandValue(HandRank.FOUR_OF_A_KIND, tieBreakers);
         }
 
         return value;
