@@ -374,22 +374,41 @@ public class HandEval {
         return isStraightFlush(check);
     }
 
-    public HandValue handEval(ArrayList<Card> hand){
+    public HandValue handEval(){
         ArrayList<Card> tieBreakers = new ArrayList<>();
         ArrayList<Card> usedCards;
-        HandValue value = new HandValue(null, null);
 
         if((usedCards = isRoyalFlush()) != null){
-            tieBreakers = null;
-            return new HandValue(HandRank.ROYAL_FLUSH, tieBreakers);
+            return new HandValue(HandRank.ROYAL_FLUSH, new ArrayList<>());
         } else if((usedCards = isStraightFlush()) != null){
             tieBreakers = usedCards;
             return new HandValue(HandRank.STRAIGHT_FLUSH, tieBreakers);
         } else if((usedCards = fourOfAKind()) != null){
             tieBreakers = usedCards;
             return new HandValue(HandRank.FOUR_OF_A_KIND, tieBreakers);
+        } else if((usedCards = isFullHouse()) != null){
+            tieBreakers = usedCards;
+            return new HandValue(HandRank.FULL_HOUSE, tieBreakers);
+        } else if((usedCards = isFlush()) != null){
+            tieBreakers = usedCards;
+            return new HandValue(HandRank.FLUSH, tieBreakers);
+        } else if((usedCards = isStraight()) != null){
+            tieBreakers = usedCards;
+            return new HandValue(HandRank.STRAIGHT, tieBreakers);
+        } else if((usedCards = threeOfAKind()) != null){
+            tieBreakers = usedCards;
+            return new HandValue(HandRank.THREE_OF_A_KIND, tieBreakers);
+        } else if((usedCards = twoPair()) != null){
+            tieBreakers = usedCards;
+            return new HandValue(HandRank.TWO_PAIR, tieBreakers);
+        } else if((usedCards = onePair()) != null){
+            tieBreakers = usedCards;
+            return new HandValue(HandRank.ONE_PAIR, tieBreakers);
         }
 
-        return value;
+        ArrayList<Card> highCards = sortHand(new ArrayList<>(fullHand));
+ 
+        return new HandValue(HandRank.HIGH_CARD, new ArrayList<>(highCards.subList(0, 5)));
+
     }
 }
