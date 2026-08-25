@@ -32,8 +32,8 @@ public class HandEval {
         return hand;
     }
 
-    private void addHighestKickers(ArrayList<Card> hand, int numberOfKickers,
-            Rank... excludedRanks){
+    private void addHighestKickers(ArrayList<Card> hand, int numberOfKickers, 
+        Rank... excludedRanks){
         ArrayList<Card> sortedHand = sortHand(new ArrayList<>(fullHand));
         ArrayList<Rank> usedKickerRanks = new ArrayList<>();
 
