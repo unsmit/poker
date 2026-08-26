@@ -6,6 +6,10 @@ public class Board{
 
     public Board(){ }
 
+    public Board(Board b){
+        communityCards = new ArrayList<>(b.getCommunityCards());
+    }
+
     public void addCard(Card c){
         if(communityCards.size() >= 5){
             throw new IllegalStateException("Board already has 5 cards");
