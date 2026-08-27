@@ -6,6 +6,12 @@ public class Player{
 
     public Player(){ }
 
+    public Player(Player b){
+        for(int i = 0; i < b.getPlayerCards().size(); i++){
+            this.playerCards.add(b.getPlayerCards().get(i));
+        }
+    }
+
     public void addCard(Card card){
         if(playerCards.size() >= 2){
             throw new IllegalStateException("Player already has two cards");
