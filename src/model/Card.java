@@ -17,13 +17,18 @@ public class Card{
         return this.suit;
     }
 
-    public boolean equals(Card c){
-        if(c.getRank() == this.getRank() && c.getSuit() == this.getSuit()){
-            return true;
+    @Override
+    public boolean equals(Object obj){
+        if (!(obj instanceof Card)) {
+            return false;
         }
-        return false;
+
+        Card c = (Card) obj;
+
+        return c.getRank() == this.getRank() && c.getSuit() == this.getSuit();
     }
 
+    @Override
     public String toString(){
         return "" + this.getRank() + " of " + this.getSuit() + "S";
     }
