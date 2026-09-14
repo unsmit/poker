@@ -1,6 +1,8 @@
 package sim;
+
 import eval.*;
 import java.util.List;
+import java.util.ArrayList;
 import model.*;
 
 public class Worker implements Runnable{
@@ -29,16 +31,20 @@ public class Worker implements Runnable{
 
             monte.finishBoard();
 
-            HandEval playerEval = new HandEval(monte.getBoard(), this.hero);
+            Board board = monte.getBoard();
+            ArrayList<Player> players = monte.getPlayers();
+
+            HandEval playerEval = new HandEval(board, this.hero);
             HandValue playerVal = playerEval.handEval();
 
-            for(int j = 0; j < monte.getPlayers().size() - 1; j++){
-                HandEval oppEval = new HandEval(monte.getBoard(), monte.getPlayers().get(j+1));
+            for(int j = 0; j < players.size() - 1; j++){
+                HandEval oppEval = new HandEval(board, players.get(j + 1));
                 HandValue oppVal = oppEval.handEval();
 
                 if(playerVal.getHandRank().getValue() < oppVal.getHandRank().getValue()){
                     numLoss++;
                     break;
+
                 } else if(playerVal.getHandRank().getValue() == oppVal.getHandRank().getValue()){
                     List<Card> playerTie = playerVal.getTieBreakers();
                     List<Card> oppTie = oppVal.getTieBreakers();
@@ -46,10 +52,12 @@ public class Worker implements Runnable{
                     for(int k = 0; k < oppTie.size(); k++){
                         if(playerTie.get(k).getRank().getVal() > oppTie.get(k).getRank().getVal()){
                             break;
+
                         } else if(playerTie.get(k).getRank().getVal() < oppTie.get(k).getRank().getVal()){
                             numLoss++;
                             break;
-                        } else if(k == oppTie.size()-1){
+
+                        } else if(k == oppTie.size() - 1){
                             numTie++;
                             break;
                         }
@@ -63,8 +71,10 @@ public class Worker implements Runnable{
 
             if(numLoss != 0){
                 this.loss++;
+
             } else if(numTie != 0){
                 this.tie++;
+
             } else {
                 this.wins++;
             }
